@@ -1,0 +1,27 @@
+# permissions for end users to view labenvironments.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: labenvironment-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: kale
+    app.kubernetes.io/part-of: kale
+    app.kubernetes.io/managed-by: kustomize
+  name: labenvironment-viewer-role
+rules:
+- apiGroups:
+  - kale.ikim.uk-essen.de
+  resources:
+  - labenvironments
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - kale.ikim.uk-essen.de
+  resources:
+  - labenvironments/status
+  verbs:
+  - get

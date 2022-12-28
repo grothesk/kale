@@ -1,0 +1,57 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: labenvironments.kale.ikim.uk-essen.de
+spec:
+  group: kale.ikim.uk-essen.de
+  names:
+    kind: LabEnvironment
+    listKind: LabEnvironmentList
+    plural: labenvironments
+    singular: labenvironment
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: LabEnvironment is the Schema for the labenvironments API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec defines the desired state of LabEnvironment
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+            properties:
+              sizeCpu:
+                type: integer
+                minimum: 1
+                maximum: 99
+              sizeMem:
+                type: integer
+                minimum: 2
+                maximum: 99
+              sizeStorage:
+                type: integer
+                minimum: 1
+                maximum: 999
+          status:
+            description: Status defines the observed state of LabEnvironment
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

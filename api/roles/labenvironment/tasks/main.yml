@@ -1,0 +1,64 @@
+---
+# tasks file for LabEnvironment
+- name: Manage Namespace
+  kubernetes.core.k8s:
+    # state: "{{ state }}"
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ ansible_operator_meta.name }}"
+
+# - name: Manage RoleBinding for user
+#   kubernetes.core.k8s:
+#     # state: "{{ state }}"
+#     definition:
+#       kind: RoleBinding
+#       apiVersion: rbac.authorization.k8s.io/v1
+#       metadata:
+#         name: "{{ ansible_operator_meta.name }}-rb"
+#         namespace: "{{ ansible_operator_meta.name }}"
+#       subjects:
+#         - kind: User
+#           apiGroup: rbac.authorization.k8s.io
+#           name: "{{ ansible_operator_meta.name }}"
+#       roleRef:
+#         apiGroup: rbac.authorization.k8s.io
+#         kind: ClusterRole
+#         name: admin
+
+- name: Manage ResourceQuota
+  kubernetes.core.k8s:
+    # state: "{{ state }}"
+    definition:
+      kind: ResourceQuota
+      apiVersion: v1
+      metadata:
+        name: lab-environment
+        namespace: "{{ ansible_operator_meta.name }}"
+      spec:
+        hard:
+          limits.cpu: "{{ size_cpu | string }}"
+          limits.memory: "{{ size_mem | string }}Gi"
+          # requests.storage: "{{ size_storage | string }}Gi"
+        scopes:
+          - NotTerminating
+
+# - name: Create LimitRange
+#   kubernetes.core.k8s:
+#     state: "{{ state }}"
+#     definition:
+#       kind: LimitRange
+#       apiVersion: v1
+#       metadata:
+#         name: core-resource-limits
+#         namespace: "{{ ansible_operator_meta.name }}"
+#       spec:
+#         limits:
+#           - type: Container
+#             default:
+#               cpu: 500m
+#               memory: "1.5Gi"
+#             defaultRequest:
+#               cpu: 250m
+#               memory: 500Mi
