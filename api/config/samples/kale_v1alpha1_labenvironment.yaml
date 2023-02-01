@@ -3,12 +3,13 @@ kind: LabEnvironment
 metadata:
   labels:
     app.kubernetes.io/name: labenvironment
-    app.kubernetes.io/instance: labenvironment-sample
+    app.kubernetes.io/instance: malte
     app.kubernetes.io/part-of: kale
     app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/created-by: kale
-  name: labenvironment-sample
+  name: malte
 spec:
   sizeCpu: 1
   sizeMem: 2
   sizeStorage: 1
+  replicas: 1

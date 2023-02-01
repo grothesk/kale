@@ -9,23 +9,23 @@
       metadata:
         name: "{{ ansible_operator_meta.name }}"
 
-# - name: Manage RoleBinding for user
-#   kubernetes.core.k8s:
-#     # state: "{{ state }}"
-#     definition:
-#       kind: RoleBinding
-#       apiVersion: rbac.authorization.k8s.io/v1
-#       metadata:
-#         name: "{{ ansible_operator_meta.name }}-rb"
-#         namespace: "{{ ansible_operator_meta.name }}"
-#       subjects:
-#         - kind: User
-#           apiGroup: rbac.authorization.k8s.io
-#           name: "{{ ansible_operator_meta.name }}"
-#       roleRef:
-#         apiGroup: rbac.authorization.k8s.io
-#         kind: ClusterRole
-#         name: admin
+- name: Manage RoleBinding for user
+  kubernetes.core.k8s:
+    # state: "{{ state }}"
+    definition:
+      kind: RoleBinding
+      apiVersion: rbac.authorization.k8s.io/v1
+      metadata:
+        name: "{{ ansible_operator_meta.name }}"
+        namespace: "{{ ansible_operator_meta.name }}"
+      subjects:
+        - kind: User
+          apiGroup: rbac.authorization.k8s.io
+          name: "{{ ansible_operator_meta.name }}"
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: admin # for example
 
 - name: Manage ResourceQuota
   kubernetes.core.k8s:
@@ -34,7 +34,7 @@
       kind: ResourceQuota
       apiVersion: v1
       metadata:
-        name: lab-environment
+        name: compute-resources
         namespace: "{{ ansible_operator_meta.name }}"
       spec:
         hard:
@@ -62,3 +62,37 @@
 #             defaultRequest:
 #               cpu: 250m
 #               memory: 500Mi
+
+- name: Manage StatefulSet
+  kubernetes.core.k8s:
+    # state: "{{ state }}"
+    definition:
+      apiVersion: apps/v1
+      kind: StatefulSet
+      metadata:
+        name: lab
+        namespace: "{{ ansible_operator_meta.name }}"
+      spec:
+        selector:
+          matchLabels:
+            app: lab # has to match .spec.template.metadata.labels
+        replicas: "{{ replicas }}"
+        # minReadySeconds: 10 # by default is 0
+        template:
+          metadata:
+            labels:
+              app: lab
+          spec:
+            #terminationGracePeriodSeconds: 10
+            containers:
+            - name: lab
+              image: "ubuntu:22.04"
+              command: [ "/bin/bash", "-c", "--" ]
+              args: [ "while true; do sleep 30; done;" ]
+              resources:
+                limits:
+                  memory: 512Mi
+                  cpu: 500m
+                requests:
+                  memory: 256Mi
+                  cpu: 250m

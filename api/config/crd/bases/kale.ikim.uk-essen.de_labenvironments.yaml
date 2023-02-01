@@ -46,6 +46,10 @@ spec:
                 type: integer
                 minimum: 1
                 maximum: 999
+              replicas:
+                type: integer
+                minimum: 0
+                maximum: 3
           status:
             description: Status defines the observed state of LabEnvironment
             type: object
