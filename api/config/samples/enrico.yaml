@@ -1,0 +1,15 @@
+apiVersion: kale.ikim.uk-essen.de/v1alpha1
+kind: LabEnvironment
+metadata:
+  labels:
+    app.kubernetes.io/name: labenvironment
+    app.kubernetes.io/instance: enrico
+    app.kubernetes.io/part-of: kale
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: kale
+  name: enrico
+spec:
+  sizeCpu: 1
+  sizeMem: 1
+  sizeStorage: 1
+  replicas: 3
