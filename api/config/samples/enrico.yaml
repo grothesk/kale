@@ -10,6 +10,6 @@ metadata:
   name: enrico
 spec:
   sizeCpu: 1
-  sizeMem: 1
+  sizeMem: 2
   sizeStorage: 1
   replicas: 3
